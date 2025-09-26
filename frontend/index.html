@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="RentRush — Get rental listing alerts in under 30 seconds. Automate searches across 1,000+ sites and be first to respond.">
+  <meta name="theme-color" content="#0b74ff">
+  <title>RentRush — Find rentals faster</title>
+
+  <!-- Open Graph (for social shares) -->
+  <meta property="og:title" content="RentRush — Find rentals faster">
+  <meta property="og:description" content="Get rental alerts in under 30 seconds. Scan 1,000+ sites, respond faster, secure your next home.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/og-image.png">
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><rect rx='12' width='100%25' height='100%25' fill='%230b74ff'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='36' font-family='Poppins' fill='white'>R</text></svg>">
+
+  <style>
+    :root{
+      --bg: #f7f9fb;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --brand: #0b74ff; /* electric blue */
+      --accent: #00c37a; /* fresh green */
+      --glass: rgba(255,255,255,0.7);
+      --radius: 14px;
+      --maxw: 1200px;
+      --shadow-sm: 0 6px 18px rgba(12,23,46,0.06);
+      --shadow-md: 0 12px 40px rgba(12,23,46,0.08);
+      --fw-heading: 700;
+      --fw-body: 400;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Poppins, Roboto, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background:var(--bg);
+      color:#0f1724;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+    }
+
+    /* ---------- LAYOUT ---------- */
+    .container{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+
+    /* ---------- NAV ---------- */
+    nav{
+      position:sticky;top:12px;z-index:999;backdrop-filter: blur(6px);
+      display:flex;align-items:center;justify-content:center;padding:12px 20px;
+    }
+    .nav-inner{width:100%;max-width:var(--maxw);display:flex;align-items:center;gap:20px}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--brand)}
+    .brand .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--brand),#0066d6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px}
+    .nav-links{margin-left:auto;display:flex;align-items:center;gap:18px}
+    .nav-links a{color:#0b1b2b;text-decoration:none;font-weight:600;padding:10px;border-radius:10px;transition:all .15s}
+    .nav-links a:hover{background:rgba(11,116,255,0.05);transform:translateY(-2px)}
+    .nav-cta{background:linear-gradient(90deg,var(--accent),#00b36a);color:white;padding:10px 16px;border-radius:10px;font-weight:700;border:none;cursor:pointer;text-decoration:none}
+
+    /* Mobile nav */
+    .mobile-menu{display:none}
+    .nav-actions{display:flex;align-items:center;gap:12px}
+
+    /* ---------- HERO ---------- */
+    .hero{padding:64px 0 40px}
+    .hero-grid{display:grid;grid-template-columns:1fr 520px;gap:36px;align-items:center}
+    .hero-eyebrow{display:inline-block;background:linear-gradient(90deg,var(--brand),#0066d6);color:#fff;padding:6px 12px;border-radius:999px;font-weight:600}
+    .hero-title{font-size:42px;line-height:1.05;margin:18px 0 12px;font-weight:800}
+    .hero-lead{color:var(--muted);font-size:18px;margin-bottom:20px}
+    .hero-cta{display:flex;gap:12px;align-items:center}
+    .btn-primary{background:linear-gradient(90deg,var(--brand),#0066d6);color:#fff;border:none;padding:14px 18px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:var(--shadow-sm);text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+    .btn-ghost{background:transparent;border:1px solid rgba(15,23,36,0.06);padding:12px 16px;border-radius:12px;color:var(--muted);cursor:pointer}
+    .hero-stats{display:flex;gap:14px;align-items:center;margin-top:18px}
+    .stat-pill{background:var(--card);padding:10px 14px;border-radius:999px;box-shadow:var(--shadow-sm);display:flex;gap:10px;align-items:center}
+
+    .hero-mock{background:linear-gradient(180deg,rgba(11,116,255,0.06),rgba(0,195,122,0.04));border-radius:18px;padding:22px;box-shadow:var(--shadow-md)}
+    .mock-img{width:100%;height:420px;border-radius:12px;background-image:url('placeholder-hero.png');background-size:cover;background-position:center}
+
+    /* ---------- FEATURES / GRID ---------- */
+    .section{padding:56px 0}
+    h2.section-title{font-size:30px;margin:0 0 16px;color:#05203a}
+    p.section-lead{color:var(--muted);margin:0 0 28px}
+
+    .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .feature-card{background:var(--card);padding:22px;border-radius:12px;box-shadow:var(--shadow-sm);display:flex;gap:14px;align-items:flex-start}
+    .feature-icon{width:56px;height:56px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;background:linear-gradient(90deg,rgba(11,116,255,0.12),rgba(0,195,122,0.08))}
+    .feature-title{font-weight:700}
+    .feature-desc{color:var(--muted);margin-top:6px;font-size:14px}
+
+    /* ---------- STEPS ---------- */
+    .steps{display:flex;gap:14px}
+    .step{flex:1;background:linear-gradient(180deg,#fff,#fbfdff);padding:18px;border-radius:12px;box-shadow:var(--shadow-sm);text-align:center}
+    .step .num{display:inline-flex;width:44px;height:44px;border-radius:10px;align-items:center;justify-content:center;background:linear-gradient(90deg,var(--brand),#0066d6);color:white;font-weight:700;margin-bottom:10px}
+
+    /* ---------- PRICING ---------- */
+    .pricing-grid{display:flex;gap:14px;align-items:stretch}
+    .plan{flex:1;background:linear-gradient(180deg,#fff,#f8fbff);padding:22px;border-radius:12px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px}
+    .plan h3{margin:0}
+    .plan-price{font-size:26px;font-weight:800;color:var(--brand)}
+    .plan-features{color:var(--muted);font-size:14px}
+
+    /* ---------- TESTIMONIALS ---------- */
+    .testimonials{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .t-card{background:linear-gradient(180deg,#fff,#fbfdff);padding:18px;border-radius:12px;box-shadow:var(--shadow-sm)}
+    .t-quote{color:var(--muted);font-style:italic}
+    .avatar{width:48px;height:48px;border-radius:50%;background:#e9eefb;display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:var(--brand);margin-right:10px}
+
+    /* ---------- FAQ ---------- */
+    .faq{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    details{background:var(--card);padding:16px;border-radius:10px;box-shadow:var(--shadow-sm)}
+    summary{font-weight:700;cursor:pointer}
+
+    /* ---------- CTA SECTION ---------- */
+    .cta-section{background:linear-gradient(135deg,var(--brand),#0066d6);color:#fff;padding:64px 0;margin-top:40px}
+    .cta-content{text-align:center;max-width:600px;margin:0 auto}
+    .cta-title{font-size:36px;font-weight:800;margin:0 0 16px}
+    .cta-desc{font-size:18px;margin:0 0 28px;opacity:0.9}
+    .cta-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+    .btn-white{background:#fff;color:var(--brand);padding:16px 24px;border-radius:12px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+    .btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.3);padding:14px 22px;border-radius:12px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+
+    /* ---------- FOOTER ---------- */
+    footer{padding:36px 0;background:#071026;color:#cfe9ff}
+    footer a{color:rgba(255,255,255,0.9);text-decoration:none}
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width:1000px){
+      .hero-grid{grid-template-columns:1fr 1fr}
+      .features-grid{grid-template-columns:repeat(2,1fr)}
+      .testimonials{grid-template-columns:1fr}
+      .pricing-grid{flex-direction:column}
+    }
+    @media (max-width:720px){
+      nav{padding:8px}
+      .nav-links{display:none}
+      .mobile-menu{display:flex;margin-left:auto}
+      .hero-grid{grid-template-columns:1fr;gap:20px}
+      .hero-mock{order: -1}
+      .hero-title{font-size:28px}
+      .features-grid{grid-template-columns:1fr}
+      .steps{flex-direction:column}
+      .faq{grid-template-columns:1fr}
+      .cta-buttons{flex-direction:column;align-items:center}
+      .cta-title{font-size:28px}
+    }
+
+    /* small helpers */
+    .muted{color:var(--muted)}
+    .center{text-align:center}
+    .uppercase{letter-spacing:1px;text-transform:uppercase}
+
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav aria-label="Primary">
+    <div class="nav-inner container">
+      <a class="brand" href="#">
+        <div class="logo">R</div>
+        <div>
+          <div style="font-weight:800;line-height:1">RentRush</div>
+          <small style="color:var(--muted);font-weight:600">Rental alerts • 30s</small>
+        </div>
+      </a>
+
+      <div class="nav-links" role="menu" aria-hidden="false">
+        <a href="#how" role="menuitem">How it works</a>
+        <a href="#features" role="menuitem">Features</a>
+        <a href="#pricing" role="menuitem">Pricing</a>
+        <a href="#reviews" role="menuitem">Reviews</a>
+        <a href="#faq" role="menuitem">FAQ</a>
+      </div>
+
+    <div class="nav-actions">
+      <a href="login.html" class="btn-ghost">Sign In</a>
+      <a class="nav-cta" href="signup.html">Get started</a>
+      <button class="mobile-menu" aria-label="Open menu" onclick="toggleMobile()"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+</nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="hero-eyebrow">Beat the market</span>
+        <h1 class="hero-title">Find your next rental <span style="color:var(--brand)">before anyone else</span></h1>
+        <p class="hero-lead">We scan 1,000+ rental websites continuously and send you listings in <strong>under 30 seconds</strong>. Be first to respond, get more viewings.</p>
+
+        <div class="hero-cta">
+          <a class="btn-primary" href="signup.html"><i class="fas fa-bolt"></i>Start my search — it's free</a>
+          <button class="btn-ghost" onclick="openPricing()">See pricing</button>
+        </div>
+
+        <div class="hero-stats" aria-hidden="true">
+          <div class="stat-pill"><i class="fas fa-star text-warning"></i><strong>4.6</strong><span class="muted" style="margin-left:8px">Trustpilot</span></div>
+          <div class="stat-pill"><i class="fas fa-home"></i><strong>40k+</strong><span class="muted" style="margin-left:8px">Homes found</span></div>
+          <div class="stat-pill"><i class="fas fa-bolt"></i><strong>30s</strong><span class="muted" style="margin-left:8px">avg alert time</span></div>
+        </div>
+
+        <div style="margin-top:18px;color:var(--muted);font-size:14px">Trusted by renters across Europe — built for speed and simplicity.</div>
+
+        <!-- TRUST / LOGOS ROW (example placeholders) -->
+        <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+          <div style="background:#fff;padding:6px 10px;border-radius:8px;box-shadow:var(--shadow-sm);font-weight:700;color:var(--brand)">Parabo</div>
+          <div style="background:#fff;padding:6px 10px;border-radius:8px;box-shadow:var(--shadow-sm);font-weight:700;color:var(--brand)">Ortix</div>
+          <div style="background:#fff;padding:6px 10px;border-radius:8px;box-shadow:var(--shadow-sm);font-weight:700;color:var(--brand)">HomeList</div>
+        </div>
+
+      </div>
+
+      <div class="hero-mock" aria-hidden="true">
+        <div class="mock-img"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="section container">
+    <div class="center">
+      <h2 class="section-title">How RentRush gets you a home faster</h2>
+      <p class="section-lead">Three simple steps: configure, receive alerts, respond faster than everyone else.</p>
+    </div>
+
+    <div class="container" style="margin-top:20px">
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <h4 style="margin:8px 0">Create your profile</h4>
+          <p class="muted">Set price, neighbourhoods, move-in date and use our template letter to reply instantly.</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h4 style="margin:8px 0">Get instant alerts</h4>
+          <p class="muted">We scan continuously and surface matches within seconds — via app, SMS or email.</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h4 style="margin:8px 0">Be first to view</h4>
+          <p class="muted">Respond with a single tap using your saved letter. More viewings, higher chance to win the listing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="section container">
+    <div class="center">
+      <h2 class="section-title">All the features you need to win</h2>
+      <p class="section-lead">Designed for speed, collaboration and reliability.</p>
+    </div>
+
+    <div class="features-grid" style="margin-top:20px">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+        <div>
+          <div class="feature-title">Instant Alerts</div>
+          <div class="feature-desc">Get a detailed match within 30 seconds with contact info and priority score.</div>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-users"></i></div>
+        <div>
+          <div class="feature-title">Search Buddy</div>
+          <div class="feature-desc">Share alerts with a friend so you both can respond immediately.</div>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-envelope-open-text"></i></div>
+        <div>
+          <div class="feature-title">Prepared Reply Templates</div>
+          <div class="feature-desc">Dynamic registration letters you can copy and send in seconds.</div>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+        <div>
+          <div class="feature-title">Search Insights</div>
+          <div class="feature-desc">Heatmaps and response analytics so you know which areas are hot.</div>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+        <div>
+          <div class="feature-title">Privacy First</div>
+          <div class="feature-desc">Your data stays private — we only reach out on your behalf when needed.</div>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-robot"></i></div>
+        <div>
+          <div class="feature-title">Smart Filtering</div>
+          <div class="feature-desc">AI-powered filters reduce noise and surface better matches.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" class="section container" style="padding-top:10px">
+    <div class="center">
+      <h2 class="section-title">Simple pricing — start free</h2>
+      <p class="section-lead">No surprises. Start with the free plan and upgrade when you're ready to get more speed.</p>
+    </div>
+
+    <div class="pricing-grid" style="margin-top:20px">
+      <div class="plan">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3>Free</h3>
+          <div class="plan-price">€0</div>
+        </div>
+        <div class="plan-features">Basic alerts, 1 search profile, email notifications</div>
+        <div style="margin-top:auto"><a class="btn-primary" href="signup.html">Start free</a></div>
+      </div>
+
+      <div class="plan" style="border:2px solid rgba(11,116,255,0.08)">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3>Pro</h3>
+          <div class="plan-price">€9 / mo</div>
+        </div>
+        <div class="plan-features">Priority alerts, 3 profiles, SMS + email, saved templates</div>
+        <div style="margin-top:auto"><a class="btn-primary" href="signup.html">Get Pro</a></div>
+      </div>
+
+      <div class="plan">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3>Pro+</h3>
+          <div class="plan-price">€19 / mo</div>
+        </div>
+        <div class="plan-features">All Pro + Search Buddy, unlimited profiles, live support</div>
+        <div style="margin-top:auto"><a class="btn-primary" href="signup.html">Get Pro+</a></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="reviews" class="section container">
+    <div class="center">
+      <h2 class="section-title">What renters say</h2>
+      <p class="section-lead">Real stories from real customers who beat the market.</p>
+    </div>
+
+    <div class="testimonials" style="margin-top:18px">
+      <div class="t-card">
+        <div style="display:flex;align-items:center">
+          <div class="avatar">SM</div>
+          <div>
+            <strong>Sarah M.</strong>
+            <div class="muted">Amsterdam</div>
+          </div>
+        </div>
+        <p class="t-quote" style="margin-top:12px">"Within 3 weeks I found my perfect apartment. The alerts came fast and the templates helped me reply immediately."</p>
+      </div>
+
+      <div class="t-card">
+        <div style="display:flex;align-items:center">
+          <div class="avatar">JL</div>
+          <div>
+            <strong>Jasper L.</strong>
+            <div class="muted">Utrecht</div>
+          </div>
+        </div>
+        <p class="t-quote" style="margin-top:12px">"I stopped refreshing listings and actually got more viewings. Worth every euro."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section container">
+    <div class="center">
+      <h2 class="section-title">Frequently asked questions</h2>
+    </div>
+
+    <div class="faq" style="margin-top:18px">
+      <details>
+        <summary>Why is finding a rental so competitive?</summary>
+        <p class="muted">Fast-moving markets and limited inventory. RentRush helps you be among the first to respond.</p>
+      </details>
+
+      <details>
+        <summary>How do you scan listings?</summary>
+        <p class="muted">Our crawlers and API aggregators continuously monitor public listings and partner feeds to surface new matches.</p>
+      </details>
+
+      <details>
+        <summary>What if I don't find a home?</summary>
+        <p class="muted">We offer a 14-day money-back guarantee on paid plans. Free plan is always available to keep searching.</p>
+      </details>
+
+      <details>
+        <summary>Can I use multiple profiles?</summary>
+        <p class="muted">Yes — Pro and Pro+ plans allow multiple profiles for different price ranges or cities.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="cta-title">Ready to find your perfect rental?</h2>
+        <p class="cta-desc">Join thousands of renters who found their homes faster with RentRush. Start your search in under 90 seconds.</p>
+        
+        <div class="cta-buttons">
+          <a class="btn-white" href="signup.html">
+            <i class="fas fa-rocket"></i>
+            Start searching now
+          </a>
+          <button class="btn-outline" onclick="document.getElementById('demo-modal').showModal()">
+            <i class="fas fa-play"></i>
+            Watch demo
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container" style="display:flex;gap:20px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap">
+      <div style="max-width:420px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div class="logo" style="width:44px;height:44px;border-radius:10px;background:#fff;color:var(--brand);display:flex;align-items:center;justify-content:center">R</div>
+          <div>
+            <strong>RentRush</strong>
+            <div class="muted" style="font-size:14px">Beat the market • Alerts in 30s</div>
+          </div>
+        </div>
+        <p class="muted">© 2025 RentRush — All rights reserved. <br> <a href="#privacy">Privacy</a> • <a href="#terms">Terms</a></p>
+      </div>
+
+      <div style="display:flex;gap:40px">
+        <div>
+          <h4 style="margin:0 0 8px">Product</h4>
+          <a href="#how" class="muted">How it works</a><br>
+          <a href="#features" class="muted">Features</a>
+        </div>
+        <div>
+          <h4 style="margin:0 0 8px">Support</h4>
+          <a href="#faq" class="muted">Help center</a><br>
+          <a href="signup.html" class="muted">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- DEMO DIALOG (native dialog) -->
+  <dialog id="demo-modal" style="border-radius:12px;padding:18px;border:none;box-shadow:var(--shadow-md);max-width:600px;width:90%">
+    <h3 style="margin-top:0">Request a demo</h3>
+    <p class="muted">Tell us when you'd like a short walkthrough and we'll send calendar options.</p>
+    <form method="dialog" style="display:grid;gap:10px">
+      <input placeholder="Your name" style="padding:10px;border-radius:8px;border:1px solid rgba(12,23,46,0.06)">
+      <input placeholder="Email" style="padding:10px;border-radius:8px;border:1px solid rgba(12,23,46,0.06)">
+      <menu style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="submit" class="btn-primary">Request</button>
+        <button type="button" class="btn-ghost" onclick="document.getElementById('demo-modal').close()">Close</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <script>
+    // Mobile menu toggle (very small, progressive enhancement)
+    function toggleMobile(){
+      const links = document.querySelector('.nav-links');
+      if(!links) return;
+      if(window.getComputedStyle(links).display === 'none'){
+        links.style.display = 'flex';
+        links.style.position = 'absolute';
+        links.style.right = '20px';
+        links.style.top = '64px';
+        links.style.background = 'white';
+        links.style.padding = '12px';
+        links.style.borderRadius = '10px';
+        links.style.boxShadow = 'var(--shadow-md)';
+        links.style.flexDirection = 'column';
+        links.style.zIndex = 999;
+      } else {
+        links.style.display = 'none';
+      }
+    }
+
+    function openPricing(){
+      location.hash = '#pricing';
+      window.scrollTo({top:document.getElementById('pricing').offsetTop - 80, behavior:'smooth'});
+    }
+
+    // Small accessibility enhancement: allow Enter to submit demo modal from inputs
+    document.querySelectorAll('dialog input').forEach(i=>i.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); this.closest('form').querySelector('button[type=submit]').click(); }}));
+
+    // Close mobile nav on resize
+    window.addEventListener('resize', ()=>{ if(window.innerWidth > 720){ document.querySelector('.nav-links').style.display = 'flex'; } });
+  </script>
+</body>
+</html>

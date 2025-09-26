@@ -1,0 +1,288 @@
+<!-- signup.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - RentRush</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Roboto', sans-serif; }
+    h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; }
+    .stepper { display: flex; justify-content: space-between; margin-bottom: 2rem; }
+    .step { text-align: center; flex: 1; position: relative; }
+    .step::before { content: ""; position: absolute; top: 20px; left: 50%; width: 100%; height: 4px; background: #e0e0e0; z-index: -1; }
+    .step:last-child::before { display: none; }
+    .step .circle { width: 40px; height: 40px; background: #ccc; border-radius: 50%; margin: 0 auto 0.5rem; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; }
+    .step.active .circle, .step.completed .circle { background: #007bff; }
+    .step.completed .circle { background: #28a745; }
+    .progress { height: 8px; border-radius: 4px; }
+    .map-placeholder { background: #f4f6f8; height: 300px; border: 2px dashed #ccc; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888; font-size: 1.2rem; margin-bottom: 1rem; }
+    .hidden { display: none; }
+    footer { margin-top: 4rem; padding: 2rem 0; background: #f8f9fa; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light py-3 shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">🏠 RentRush</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">How it Works</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
+          <li class="nav-item"><a href="#" class="nav-link btn btn-primary text-white ms-2">Start Now</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <div class="text-center mb-4">
+      <h1 class="fw-bold">Find your new home the easy way</h1>
+      <p class="lead text-muted">Sign up for RentRush today. Try it 14 days risk free. If you're not satisfied you'll always get your money back — just email us at <a href="mailto:help@rentrush.com">help@rentrush.com</a>.</p>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress mb-5">
+      <div class="progress-bar bg-primary" id="progressBar" style="width: 25%"></div>
+    </div>
+
+    <!-- Stepper -->
+    <div class="stepper mb-5">
+      <div class="step active" id="stepIndicator1">
+        <div class="circle">1</div>
+        <div>Location</div>
+      </div>
+      <div class="step" id="stepIndicator2">
+        <div class="circle">2</div>
+        <div>Requirements</div>
+      </div>
+      <div class="step" id="stepIndicator3">
+        <div class="circle">3</div>
+        <div>Details</div>
+      </div>
+      <div class="step" id="stepIndicator4">
+        <div class="circle">4</div>
+        <div>Let's go!</div>
+      </div>
+    </div>
+
+    <form id="signupForm" action="#" method="POST">
+
+      <!-- Step 1: Location -->
+      <div class="form-step" id="step1">
+        <h3 class="mb-3">Where are you looking?</h3>
+        <div class="mb-3">
+          <label class="form-label">City</label>
+          <input type="text" class="form-control" placeholder="e.g. Amsterdam">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Neighbourhoods</label>
+          <input type="text" class="form-control" placeholder="e.g. De Pijp, Jordaan">
+        </div>
+        <div class="map-placeholder mb-3">
+          🗺️ Interactive map placeholder (click to draw area)
+        </div>
+        <p class="text-muted">🏠 With this search you can expect <strong>65 matches per week.</strong></p>
+        <button type="button" class="btn btn-primary next-step">Next</button>
+      </div>
+
+      <!-- Step 2: Requirements -->
+      <div class="form-step hidden" id="step2">
+        <h3 class="mb-3">Your rental preferences</h3>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Min price (€)</label>
+            <input type="number" class="form-control" placeholder="e.g. 1000">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Max price (€)</label>
+            <input type="number" class="form-control" placeholder="e.g. 2500">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Min beds</label>
+            <input type="number" class="form-control" placeholder="e.g. 2">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Floor area (m²)</label>
+            <input type="number" class="form-control" placeholder="e.g. 60">
+          </div>
+        </div>
+        <p class="text-muted mt-3">🏠 With this search you can expect <strong>65 matches per week.</strong></p>
+        <button type="button" class="btn btn-secondary prev-step">Back</button>
+        <button type="button" class="btn btn-primary next-step">Next</button>
+      </div>
+
+      <!-- Step 3: Details -->
+      <div class="form-step hidden" id="step3">
+        <h3 class="mb-3">Additional preferences</h3>
+        <div class="mb-3">
+          <label class="form-label">Furnished</label>
+          <select class="form-select">
+            <option value="any">Any</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Nice-to-haves</label>
+          <input type="text" class="form-control" placeholder="e.g. Balcony, garden">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Also search for</label>
+          <input type="text" class="form-control" placeholder="e.g. Student housing, short term">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Show only properties for</label>
+          <select class="form-select">
+            <option value="any">Any</option>
+            <option value="expats">Expats</option>
+            <option value="families">Families</option>
+          </select>
+        </div>
+        <p class="text-muted">🏠 With this search you can expect <strong>65 matches per week.</strong></p>
+        <button type="button" class="btn btn-secondary prev-step">Back</button>
+        <button type="button" class="btn btn-primary next-step">Next</button>
+      </div>
+
+      <!-- Step 4: Account -->
+      <div class="form-step hidden" id="step4">
+        <h3 class="mb-3">Create your account</h3>
+        <div class="mb-3">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" required>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" required>
+          <label class="form-check-label">I accept the <a href="#">terms and conditions</a></label>
+        </div>
+        <p class="text-muted">🏠 With this search you can expect <strong>65 matches per week.</strong></p>
+        <button type="button" class="btn btn-secondary prev-step">Back</button>
+        <button type="submit" class="btn btn-success">Start My Search</button>
+      </div>
+
+      <!-- Success Screen -->
+      <div class="form-step hidden text-center py-5" id="successStep">
+        <h2 class="text-success mb-3">🎉 You're all set!</h2>
+        <p class="lead">Check your email to activate your account and start receiving matches today.</p>
+        <a href="index.html" class="btn btn-primary mt-3">Back to Home</a>
+      </div>
+    </form>
+  </div>
+
+  <footer class="text-center">
+    <div class="container">
+      <p class="mb-0">&copy; 2025 RentRush. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const steps = document.querySelectorAll('.form-step');
+    const nextBtns = document.querySelectorAll('.next-step');
+    const prevBtns = document.querySelectorAll('.prev-step');
+    const progressBar = document.getElementById('progressBar');
+    const stepIndicators = [1, 2, 3, 4].map(n => document.getElementById(`stepIndicator${n}`));
+
+    let currentStep = 0;
+
+    nextBtns.forEach(btn => btn.addEventListener('click', () => changeStep(1)));
+    prevBtns.forEach(btn => btn.addEventListener('click', () => changeStep(-1)));
+
+    function changeStep(direction) {
+      // Hide current step
+      steps[currentStep].classList.add('hidden');
+      stepIndicators[currentStep].classList.remove('active');
+      if (direction > 0) {
+        stepIndicators[currentStep].classList.add('completed');
+      } else {
+        stepIndicators[currentStep].classList.remove('completed');
+      }
+      // Update step index
+      currentStep += direction;
+      if (currentStep < 0) currentStep = 0;
+      if (currentStep >= steps.length - 1) currentStep = steps.length - 2; // Prevent going to success step via navigation
+      // Show new step
+      steps[currentStep].classList.remove('hidden');
+      stepIndicators[currentStep].classList.add('active');
+      // Update progress bar
+      progressBar.style.width = `${((currentStep + 1) / 4) * 100}%`;
+    }
+
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  // Collect all form data from all steps
+  const formData = {
+    // Step 1: Location
+    city: document.querySelector('#step1 input[placeholder*="Amsterdam"]').value,
+    neighbourhoods: document.querySelector('#step1 input[placeholder*="De Pijp"]').value,
+    
+    // Step 2: Requirements  
+    min_price: parseInt(document.querySelector('#step2 input[placeholder*="1000"]').value) || null,
+    max_price: parseInt(document.querySelector('#step2 input[placeholder*="2500"]').value) || null,
+    min_beds: parseInt(document.querySelector('#step2 input[placeholder*="2"]').value) || null,
+    floor_area: parseInt(document.querySelector('#step2 input[placeholder*="60"]').value) || null,
+    
+    // Step 3: Details
+    furnished: document.querySelector('#step3 select').value,
+    nice_to_haves: document.querySelector('#step3 input[placeholder*="Balcony"]').value,
+    also_search_for: document.querySelector('#step3 input[placeholder*="Student housing"]').value,
+    show_only_for: document.querySelector('#step3 select:last-of-type').value,
+    
+    // Step 4: Account
+    name: document.querySelector('#step4 input[type="text"]').value,
+    email: document.querySelector('#step4 input[type="email"]').value,
+    password: document.querySelector('#step4 input[type="password"]').value,
+    phone: '' // Add phone field to form if needed
+  };
+  
+  console.log('Sending data:', formData); // For debugging
+  
+  try {
+    const response = await fetch('http://localhost:3000/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    });
+    
+    const result = await response.json();
+    
+    if (response.ok) {
+      console.log('Success:', result);
+      // Show success step
+      steps[currentStep].classList.add('hidden');
+      document.getElementById('successStep').classList.remove('hidden');
+      progressBar.style.width = '100%';
+      stepIndicators.forEach(ind => ind.classList.remove('active'));
+    } else {
+      console.error('Error:', result);
+      alert('Registration failed: ' + result.error);
+    }
+    
+  } catch (error) {
+    console.error('Network error:', error);
+    alert('Registration failed. Please check your connection and try again.');
+  }
+});
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
