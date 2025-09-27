@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="js/config.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up - RentRush</title>
@@ -191,39 +192,32 @@
     </div>
   </footer>
 
-  <script>
-    const steps = document.querySelectorAll('.form-step');
-    const nextBtns = document.querySelectorAll('.next-step');
-    const prevBtns = document.querySelectorAll('.prev-step');
-    const progressBar = document.getElementById('progressBar');
-    const stepIndicators = [1, 2, 3, 4].map(n => document.getElementById(`stepIndicator${n}`));
+<script>
+const steps = document.querySelectorAll('.form-step');
+const nextBtns = document.querySelectorAll('.next-step');
+const prevBtns = document.querySelectorAll('.prev-step');
+const progressBar = document.getElementById('progressBar');
+const stepIndicators = [1, 2, 3, 4].map(n => document.getElementById(`stepIndicator${n}`));
 
-    let currentStep = 0;
+let currentStep = 0;
 
-    nextBtns.forEach(btn => btn.addEventListener('click', () => changeStep(1)));
-    prevBtns.forEach(btn => btn.addEventListener('click', () => changeStep(-1)));
+// Add event listeners
+nextBtns.forEach(btn => btn.addEventListener('click', () => changeStep(1)));
+prevBtns.forEach(btn => btn.addEventListener('click', () => changeStep(-1)));
 
-    function changeStep(direction) {
-      // Hide current step
-      steps[currentStep].classList.add('hidden');
-      stepIndicators[currentStep].classList.remove('active');
-      if (direction > 0) {
-        stepIndicators[currentStep].classList.add('completed');
-      } else {
-        stepIndicators[currentStep].classList.remove('completed');
-      }
-      // Update step index
-      currentStep += direction;
-      if (currentStep < 0) currentStep = 0;
-      if (currentStep >= steps.length - 1) currentStep = steps.length - 2; // Prevent going to success step via navigation
-      // Show new step
-      steps[currentStep].classList.remove('hidden');
-      stepIndicators[currentStep].classList.add('active');
-      // Update progress bar
-      progressBar.style.width = `${((currentStep + 1) / 4) * 100}%`;
-    }
+// The changeStep function that's missing
+function changeStep(dir) {
+  steps[currentStep].classList.add('hidden');
+  stepIndicators[currentStep].classList.remove('active');
+  if (dir === 1) stepIndicators[currentStep].classList.add('completed');
+  currentStep += dir;
+  steps[currentStep].classList.remove('hidden');
+  stepIndicators[currentStep].classList.add('active');
+  progressBar.style.width = `${(currentStep + 1) * 25}%`;
+}
 
-    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+// Form submission
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   
   // Collect all form data from all steps
@@ -254,7 +248,7 @@
   console.log('Sending data:', formData); // For debugging
   
   try {
-    const response = await fetch('http://localhost:3000/api/auth/register', {
+    const response = await fetch(`${window.API_URL}/api/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -281,7 +275,7 @@
     alert('Registration failed. Please check your connection and try again.');
   }
 });
-  </script>
+</script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
