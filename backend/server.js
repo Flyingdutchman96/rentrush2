@@ -6,8 +6,12 @@ import cors from 'cors';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import db from './database.js';
 import { sendVerificationEmail } from './emailService.js';
+import db from './database.js';
+import dbProd from './database-production.js';
+
+const database = process.env.NODE_ENV === 'production' ? dbProd : db;
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -77,9 +81,9 @@ app.post('/api/auth/register', async (req, res) => {
     }
 
     // Check if user already exists
-    const existingUser = await db.getAsync(
-      'SELECT id FROM users WHERE email = ?', 
-      [email]
+    const existingUser = await database.getAsync(
+     'SELECT id FROM users WHERE LOWER(email) = LOWER(?)', 
+    [email.toLowerCase()]
     );
 
     if (existingUser) {
@@ -97,18 +101,18 @@ app.post('/api/auth/register', async (req, res) => {
     const token_expires_at = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
     // Insert user into database
-    const result = await db.runAsync(`
-      INSERT INTO users (
+    const result = await database.runAsync(`
+    INSERT INTO users (
         email, password_hash, name, phone, city, neighbourhoods,
         min_price, max_price, min_beds, floor_area, furnished,
         nice_to_haves, also_search_for, show_only_for,
         verification_token, token_expires_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
-      email, password_hash, name, phone, city, neighbourhoods,
-      min_price, max_price, min_beds, floor_area, furnished,
-      nice_to_haves, also_search_for, show_only_for,
-      verification_token, token_expires_at
+        email.toLowerCase(), password_hash, name, phone, city, neighbourhoods,  // Note: email.toLowerCase()
+        min_price, max_price, min_beds, floor_area, furnished,
+        nice_to_haves, also_search_for, show_only_for,
+        verification_token, token_expires_at
     ]);
 
     console.log('✅ User created:', { id: result.lastID, email });
@@ -146,11 +150,11 @@ app.post('/api/auth/login', async (req, res) => {
       });
     }
 
-    // Find user by email
-    const user = await db.getAsync(`
+    // Find user by email (case-insensitive)
+    const user = await database.getAsync(`
       SELECT id, email, password_hash, name, email_verified 
       FROM users 
-      WHERE email = ?
+      WHERE LOWER(email) = LOWER(?)
     `, [email]);
 
     if (!user) {
@@ -219,7 +223,7 @@ app.get('/api/user/preferences', async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
     // Get user preferences from database
-    const user = await db.getAsync(`
+    const user = await database.getAsync(`
       SELECT name, email, city, neighbourhoods, min_price, max_price, 
              min_beds, floor_area, furnished, nice_to_haves, 
              also_search_for, show_only_for
@@ -252,7 +256,7 @@ app.get('/api/auth/verify/:token', async (req, res) => {
     const { token } = req.params;
 
     // Find user with this verification token
-    const user = await db.getAsync(`
+    const user = await database.getAsync(`
       SELECT id, email, name, verification_token, token_expires_at, email_verified 
       FROM users 
       WHERE verification_token = ?
@@ -299,7 +303,7 @@ app.get('/api/auth/verify/:token', async (req, res) => {
     }
 
     // Verify the user
-    await db.runAsync(`
+    await database.runAsync(`
       UPDATE users 
       SET email_verified = TRUE, verification_token = NULL, token_expires_at = NULL 
       WHERE id = ?
@@ -341,7 +345,7 @@ app.get('/api/auth/verify/:token', async (req, res) => {
 // Debug endpoint to view users (remove in production)
 app.get('/api/users', async (req, res) => {
   try {
-    const users = await db.allAsync('SELECT id, email, name, city, email_verified, created_at FROM users');
+    const users = await database.allAsync('SELECT id, email, name, city, email_verified, created_at FROM users');
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -351,3 +355,5 @@ app.get('/api/users', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+//
