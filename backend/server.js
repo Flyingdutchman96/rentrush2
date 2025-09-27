@@ -7,10 +7,14 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { sendVerificationEmail } from './emailService.js';
-import db from './database.js';
-import dbProd from './database-production.js';
-
-const database = process.env.NODE_ENV === 'production' ? dbProd : db;
+let database;
+if (process.env.NODE_ENV === 'production') {
+  const { default: dbProd } = await import('./database-production.js');
+  database = dbProd;
+} else {
+  const { default: db } = await import('./database.js');
+  database = db;
+}
 
 
 const app = express();
